@@ -18,6 +18,7 @@ from evo2 import Evo2
 from datasets.akita_dataset import get_dataloader
 
 # TODO: WANDB INTEGRATION - Import the library
+import wandb
 
 data_path = "/ocean/projects/cis250160p/rhettiar/contact_map_prediction/extra_data.1m/tfrecords"
 
@@ -37,7 +38,8 @@ def main():
     args = parser.parse_args()
 
     # TODO: WANDB INTEGRATION - Initialize a new run
-
+    wandb.init(project="evo2-contact-map", config={"model_name": args.model_name})
+    
     save_path_str = "evo2/contact_map/HFF/model.pt"
     save_path = Path(save_path_str)
     save_path.parent.mkdir(parents=True, exist_ok=True)
@@ -96,6 +98,7 @@ def main():
             optimizer.step()
 
             # TODO: WANDB INTEGRATION - Log step-wise training loss
+            wandb.log({"train_loss": loss.item()})
 
             # Update the progress bar with the current loss
             train_pbar.set_postfix(loss=f"{loss.cpu().item():.4f}")
@@ -143,16 +146,19 @@ def main():
             current_lr = lr_scheduler.get_last_lr()[0]
             
             # TODO: WANDB INTEGRATION - Log epoch-wise validation loss and learning rate (make sure to log the epoch number as well)
+            wandb.log({"val_loss": this_val_loss_average, "lr": current_lr, "epoch": epoch})
 
             if this_val_loss_average < val_loss:
                 val_loss = this_val_loss_average
                 torch.save(task_layer, save_path)
                 # TODO: WANDB INTEGRATION - Log the best validation loss so far
+                wandb.run.summary["best_val_loss"] = val_loss
 
             # Print the final validation loss for the epoch
             print(f"Epoch {epoch} final validation loss: {val_loss:.4f}")
 
     # TODO: WANDB INTEGRATION - Finish the run
+    wandb.finish()
 
 if __name__ == "__main__":
     main()
