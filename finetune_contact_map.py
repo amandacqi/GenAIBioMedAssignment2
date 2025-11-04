@@ -40,7 +40,7 @@ def main():
     # TODO: WANDB INTEGRATION - Initialize a new run
     wandb.init(project="evo2-contact-map", config={"model_name": args.model_name})
     
-    save_path_str = "evo2/contact_map/HFF/model.pt"
+    save_path_str = "evo2/contact_map/HFF/model_30_epochs.pt"
     save_path = Path(save_path_str)
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -61,7 +61,7 @@ def main():
     val_loss = 10000
     dic = {0: "A", 1: "C", 2: "G", 3: "T"}
     
-    for epoch in range(1, 10):
+    for epoch in range(1, 31):
         task_layer.train() # Set model to training mode
         
         # Wrap train_loader with tqdm for a progress bar

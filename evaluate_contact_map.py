@@ -34,9 +34,9 @@ def main():
     for cell in ["HFF"]:
         print(cell)
         
-        save_path = "evo2/contact_map/{}/model.pt".format(cell)
-        fw_pred = open("evo2/contact_map/{}/pred.npy".format(cell), "wb")
-        fw_tgt = open("evo2/contact_map/{}/target.npy".format(cell), "wb")
+        save_path = "evo2/contact_map/{}/model_30_epochs.pt".format(cell)
+        fw_pred = open("evo2/contact_map/{}/pred_30_epochs.npy".format(cell), "wb")
+        fw_tgt = open("evo2/contact_map/{}/target_30_epochs.npy".format(cell), "wb")
         
         # Initialize model
         model = Evo2(args.model_name)
